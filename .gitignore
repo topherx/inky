@@ -20,3 +20,5 @@ upload.sh
 
 .elixir_ls
 .tool-versions
+.devenv/
+.devenv.flake.nix
