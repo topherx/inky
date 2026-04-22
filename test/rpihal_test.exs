@@ -59,7 +59,7 @@ defmodule Inky.RpiHALTest do
       :ok = RpiHAL.handle_update(ctx.pixels, display.accent, :await, state)
 
       # assert
-      assert_received {:init, init_args}
+      assert_received {:init, _init_args}
       assert TestIO.assert_expectations() == :ok
       spec = load_spec("data/success1.dat", __DIR__)
       mailbox = gather_messages()
@@ -84,7 +84,7 @@ defmodule Inky.RpiHALTest do
       :ok = RpiHAL.handle_update(ctx.pixels, display.accent, :await, state)
 
       # assert
-      assert_received {:init, init_args}
+      assert_received {:init, _init_args}
       assert TestIO.assert_expectations() == :ok
       spec = load_spec("data/success2.dat", __DIR__)
       mailbox = gather_messages()

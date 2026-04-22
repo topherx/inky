@@ -34,7 +34,7 @@ defmodule Inky.InkyTest do
   end
 
   describe "Inky updates" do
-    test "update pixel data when empty", %{inited_state: is} do
+    test "update pixel data when empty", %{inited_state: %Inky.State{} = is} do
       TestHAL.on_update(:ok)
       pixels = %{{0, 0} => :black, {2, 3} => :red}
       {:reply, :ok, state} = Inky.handle_call({:set_pixels, pixels, %{}}, :from, is)
@@ -42,7 +42,7 @@ defmodule Inky.InkyTest do
       assert state.pixels == pixels
     end
 
-    test "update pixel data when already set", %{inited_state: is} do
+    test "update pixel data when already set", %{inited_state: %Inky.State{} = is} do
       TestHAL.on_update(:ok)
       pixels = %{{0, 0} => :black, {2, 3} => :red}
       {:reply, :ok, state} = Inky.handle_call({:set_pixels, pixels, %{}}, :from, is)
@@ -56,7 +56,7 @@ defmodule Inky.InkyTest do
   end
 
   describe "Inky timeout" do
-    test ":once when device ready", %{inited_state: is} do
+    test ":once when device ready", %{inited_state: %Inky.State{} = is} do
       TestHAL.on_update(:ok)
       is = %Inky.State{is | wait_type: :once}
       {:noreply, state} = Inky.handle_info(:timeout, is)
@@ -65,7 +65,7 @@ defmodule Inky.InkyTest do
       assert TestUtil.gather_messages() == [{TestHAL, {:update, :ok}}]
     end
 
-    test ":once when device busy", %{inited_state: is} do
+    test ":once when device busy", %{inited_state: %Inky.State{} = is} do
       TestHAL.on_update(:busy)
       is = %Inky.State{is | wait_type: :once}
 
@@ -77,7 +77,7 @@ defmodule Inky.InkyTest do
       end)
     end
 
-    test ":await", %{inited_state: is} do
+    test ":await", %{inited_state: %Inky.State{} = is} do
       TestHAL.on_update(:ok)
       is = %Inky.State{is | wait_type: :await}
       {:noreply, state} = Inky.handle_info(:timeout, is)

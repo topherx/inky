@@ -4,8 +4,8 @@ defmodule Inky.MixProject do
   def project do
     [
       app: :inky,
-      version: "1.0.2",
-      elixir: "~> 1.8",
+      version: "1.1.0",
+      elixir: "~> 1.19",
       start_permanent: Mix.env() == :prod,
       source_url: "https://github.com/pappersverk/inky/",
       deps: deps(),
@@ -24,11 +24,11 @@ defmodule Inky.MixProject do
   # Run "mix help deps" to learn about dependencies.
   defp deps do
     [
-      {:circuits_gpio, "~> 0.4"},
-      {:circuits_spi, "~> 0.1"},
-      {:circuits_i2c, "~> 0.3"},
-      {:credo, "~> 1.0.0", only: [:dev, :test], runtime: false},
-      {:ex_doc, ">= 0.0.0", only: :dev}
+      {:circuits_gpio, "~> 2.0"},
+      {:circuits_spi, "~> 2.0"},
+      {:circuits_i2c, "~> 2.0"},
+      {:credo, "~> 1.7", only: [:dev, :test], runtime: false},
+      {:ex_doc, "~> 0.34", only: :dev, runtime: false}
     ]
   end
 

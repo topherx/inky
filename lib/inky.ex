@@ -182,7 +182,7 @@ defmodule Inky do
   end
 
   def handle_call(request, from, state) do
-    Logger.warn("Dropping unexpected call #{inspect(request)} from #{inspect(from)}")
+    Logger.warning("Dropping unexpected call #{inspect(request)} from #{inspect(from)}")
     {:reply, :ok, state}
   end
 
@@ -195,14 +195,14 @@ defmodule Inky do
   end
 
   def handle_cast(request, state) do
-    Logger.warn("Dropping unexpected cast #{inspect(request)}")
+    Logger.warning("Dropping unexpected cast #{inspect(request)}")
     {:noreply, state}
   end
 
   # GenServer messages
 
   @impl GenServer
-  def handle_info(:timeout, state) do
+  def handle_info(:timeout, %State{} = state) do
     case push(state.wait_type, state) do
       {:error, reason} -> Logger.error("Failed to push graph on timeout: #{inspect(reason)}")
       :ok -> :ok
@@ -222,7 +222,7 @@ defmodule Inky do
 
   # Set pixels
 
-  defp do_set_pixels(arg, opts, state) do
+  defp do_set_pixels(arg, opts, %State{} = state) do
     %State{
       state
       | pixels: update_pixels(arg, state),
@@ -275,11 +275,11 @@ defmodule Inky do
 
   defp handle_push(response, state), do: reply(response, :nowait, state)
 
-  defp reply(response, timeout_policy, state) do
+  defp reply(response, timeout_policy, %State{} = state) do
     {:reply, response, %State{state | wait_type: timeout_policy}}
   end
 
-  defp reply_timeout(response \\ :ok, timeout_policy, state) do
+  defp reply_timeout(response \\ :ok, timeout_policy, %State{} = state) do
     {:reply, response, %State{state | wait_type: timeout_policy}, @push_timeout}
   end
 

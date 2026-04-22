@@ -1,4 +1,4 @@
-ExUnit.configure(formatters: [ExUnit.CLIFormatter, ExUnitNotifier])
+ExUnit.configure(formatters: [ExUnit.CLIFormatter])
 ExUnit.start()
 
 Code.require_file("support/testutil.exs", __DIR__)
