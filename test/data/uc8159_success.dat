@@ -1,0 +1,23 @@
+[
+  write_reset: 0,
+  sleep: 100,
+  write_reset: 1,
+  sleep: 100,
+  read_busy: 1,
+  send_command: {0, [239, 8]},
+  send_command: {1, [55, 0, 35, 35, 35]},
+  send_command: {3, [0]},
+  send_command: {6, [63, 63, 17, 36]},
+  send_command: {65, [0]},
+  send_command: {80, [55]},
+  send_command: {101, [0]},
+  send_command: {97, [3, 32, 1, 224]},
+  send_command: {227, [170]},
+  send_command: {16, :bitstring},
+  send_command: 4,
+  read_busy: 1,
+  send_command: {18, [0]},
+  read_busy: 1,
+  send_command: 2,
+  read_busy: 1
+]

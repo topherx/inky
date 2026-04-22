@@ -144,8 +144,9 @@ defmodule Inky do
 
     hal_mod =
       case type do
-        :phat_ssd1608 -> opts[:hal_mod] || Inky.HAL.PhatSSD1608
-        _ -> opts[:hal_mod] || RpiHAL
+        :phat_ssd1608  -> opts[:hal_mod] || Inky.HAL.PhatSSD1608
+        :impression_73 -> opts[:hal_mod] || Inky.HAL.UC8159
+        _              -> opts[:hal_mod] || RpiHAL
       end
 
     display = Display.spec_for(type, accent)

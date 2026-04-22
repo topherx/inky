@@ -3,7 +3,7 @@ defmodule Inky.PixelUtilTest do
 
   use ExUnit.Case
 
-  import Inky.PixelUtil, only: [pixels_to_bits: 5]
+  import Inky.PixelUtil, only: [pixels_to_bits: 5, pixels_to_4bpp: 4]
 
   doctest Inky.PixelUtil
 
@@ -17,6 +17,40 @@ defmodule Inky.PixelUtilTest do
 
   defp to_bit_list(bitstring) do
     for <<b::1 <- bitstring>>, do: b, into: []
+  end
+
+  describe "pixels_to_4bpp" do
+    @color_map %{black: 0, white: 1, green: 2, blue: 3, red: 4, yellow: 5, orange: 6, miss: 1}
+
+    test "packs two pixels per byte, high nibble first" do
+      pixels = %{{0, 0} => :black, {1, 0} => :white}
+      result = pixels_to_4bpp(pixels, 2, 1, @color_map)
+      assert result == <<0::4, 1::4>>
+    end
+
+    test "uses miss value for unknown pixels" do
+      result = pixels_to_4bpp(%{}, 4, 1, @color_map)
+      assert byte_size(result) == 2
+      assert result == <<1::4, 1::4, 1::4, 1::4>>
+    end
+
+    test "produces correct byte count for 800x480" do
+      result = pixels_to_4bpp(%{}, 800, 480, @color_map)
+      assert byte_size(result) == 800 * 480 / 2
+    end
+
+    test "maps all 7 colors correctly in a single row" do
+      pixels =
+        %{
+          {0, 0} => :black, {1, 0} => :white,
+          {2, 0} => :green, {3, 0} => :blue,
+          {4, 0} => :red,   {5, 0} => :yellow,
+          {6, 0} => :orange, {7, 0} => :white
+        }
+
+      result = pixels_to_4bpp(pixels, 8, 1, @color_map)
+      assert result == <<0::4, 1::4, 2::4, 3::4, 4::4, 5::4, 6::4, 1::4>>
+    end
   end
 
   describe "the new pixel conversion API" do

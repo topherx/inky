@@ -50,11 +50,12 @@ defmodule Inky.RpiIO do
     pin_mappings = opts[:pin_mappings] || @default_pin_mappings
 
     spi_address = "spidev0." <> to_string(pin_mappings[:cs0_pin])
+    spi_speed = opts[:spi_speed_hz] || @spi_speed_hz
 
     {:ok, dc_pid} = gpio.open(pin_mappings[:dc_pin], :output)
     {:ok, reset_pid} = gpio.open(pin_mappings[:reset_pin], :output)
     {:ok, busy_pid} = gpio.open(pin_mappings[:busy_pin], :input)
-    {:ok, spi_pid} = spi.open(spi_address, speed_hz: @spi_speed_hz)
+    {:ok, spi_pid} = spi.open(spi_address, speed_hz: spi_speed)
 
     # Use binary pattern matching to pull out the ADC counts (low 10 bits)
     # <<_::size(6), counts::size(10)>> = SPI.transfer(spi_pid, <<0x78, 0x00>>)

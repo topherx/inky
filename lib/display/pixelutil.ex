@@ -70,4 +70,24 @@ defmodule Inky.PixelUtil do
 
   defp pixel_key(:x, i, j), do: {i, j}
   defp pixel_key(:y, i, j), do: {j, i}
+
+  @doc """
+  Converts pixels to a 4-bits-per-pixel binary for the UC8159 ACeP 7-color driver.
+  Two pixels are packed per byte (high nibble = first pixel, low nibble = second pixel),
+  traversed row by row, left to right. Width must be even.
+
+  color_map must include a `:miss` key used as the default for unknown pixels.
+  """
+  def pixels_to_4bpp(pixels, width, height, color_map) do
+    for y <- 0..(height - 1),
+        x <- 0..(width - 1)//2,
+        do: pack_nibble_pair(pixels, x, y, color_map),
+        into: <<>>
+  end
+
+  defp pack_nibble_pair(pixels, x, y, color_map) do
+    hi = color_map[pixels[{x, y}]] || color_map.miss
+    lo = color_map[pixels[{x + 1, y}]] || color_map.miss
+    <<hi::4, lo::4>>
+  end
 end
